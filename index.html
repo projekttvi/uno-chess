@@ -9,7 +9,7 @@
     <title>UNO Chess — Шахматы с картами УНО</title>
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="alternate icon" type="image/png" href="assets/favicon.png">
-    <link rel="stylesheet" href="css/style.css?v=14">
+    <link rel="stylesheet" href="css/style.css?v=16">
 </head>
 <body>
     <!-- Top Header -->
@@ -141,18 +141,23 @@
             </div>
 
             <!-- Move History with Scrubber -->
-            <div class="panel-card">
-                <div class="panel-title">
-                    <span>История ходов & эффектов</span>
+            <div class="panel-card history-panel">
+                <div id="historyHeaderToggle" class="panel-title history-toggle" title="Нажмите, чтобы свернуть/развернуть историю">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span>История ходов</span>
+                        <span id="histToggleIcon" class="hist-toggle-icon">▾</span>
+                    </div>
                     <span id="histStepIndicator" class="hist-indicator"></span>
                 </div>
-                <div id="historyList" class="history-container"></div>
-                <div class="history-controls">
-                    <button id="btnHistStart" class="btn-hist" title="В начало партии (Home)">⏮</button>
-                    <button id="btnHistPrev" class="btn-hist" title="Шаг назад (←)">◀</button>
-                    <button id="btnHistNext" class="btn-hist" title="Шаг вперед (→)">▶</button>
-                    <button id="btnHistEnd" class="btn-hist" title="В конец партии (End)">⏭</button>
-                    <button id="btnReturnToLive" class="btn-hist btn-hist-live hidden" title="Вернуться к актуальной позиции">⚡ К игре</button>
+                <div id="historyBody" class="history-body collapsed">
+                    <div id="historyList" class="history-container"></div>
+                    <div class="history-controls">
+                        <button id="btnHistStart" class="btn-hist" title="В начало партии (Home)">⏮</button>
+                        <button id="btnHistPrev" class="btn-hist" title="Шаг назад (←)">◀</button>
+                        <button id="btnHistNext" class="btn-hist" title="Шаг вперед (→)">▶</button>
+                        <button id="btnHistEnd" class="btn-hist" title="В конец партии (End)">⏭</button>
+                        <button id="btnReturnToLive" class="btn-hist btn-hist-live hidden" title="Вернуться к актуальной позиции">⚡ К игре</button>
+                    </div>
                 </div>
             </div>
         </div>

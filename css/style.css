@@ -1024,32 +1024,291 @@ main {
 
 @media (max-width: 640px) {
     :root {
-        --square-size: clamp(38px, calc((100vw - 52px) / 8), 54px);
-        --board-padding: 16px;
+        --square-size: clamp(34px, calc((100vw - 40px) / 8), 40px);
+        --board-padding: 6px;
     }
-    .board-wrapper {
-        padding: var(--board-padding);
+
+    body {
+        min-height: 100vh;
+        overflow-x: hidden;
     }
-    .player-bar {
-        padding: 6px 12px;
-    }
-    .coordinates-ranks {
-        left: 4px;
-        font-size: 0.7rem;
-    }
-    .coordinates-files {
-        bottom: 2px;
-        font-size: 0.7rem;
-    }
+
     header {
-        padding: 8px 12px;
+        padding: 4px 8px;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 4px;
     }
+
+    .logo-container {
+        transform: scale(0.8);
+        transform-origin: left center;
+        margin: 0;
+    }
+
     .header-controls {
         width: 100%;
-        justify-content: space-between;
+        display: flex;
+        gap: 4px;
         overflow-x: auto;
+        padding-bottom: 2px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .header-controls::-webkit-scrollbar {
+        display: none;
+    }
+
+    .styled-select {
+        height: 28px;
+        font-size: 0.74rem;
+        padding: 2px 6px;
+    }
+
+    .header-controls .btn {
+        height: 28px;
+        font-size: 0.74rem;
+        padding: 3px 8px;
+        white-space: nowrap;
+    }
+
+    main {
+        padding: 4px;
+        gap: 4px;
+        align-items: center;
+    }
+
+    .board-container {
+        width: 100%;
+        max-width: calc(var(--square-size) * 8 + var(--board-padding) * 2 + 8px);
+        margin: 0 auto;
+    }
+
+    .board-wrapper {
+        padding: var(--board-padding);
+        border-radius: 10px;
+    }
+
+    .coordinates-ranks {
+        left: 2px;
+        font-size: 0.62rem;
+    }
+
+    .coordinates-files {
+        bottom: 1px;
+        font-size: 0.62rem;
+    }
+
+    .player-bar {
+        padding: 2px 8px;
+        margin: 1px 0;
+        border-radius: 6px;
+        min-height: 24px;
+    }
+
+    .player-avatar {
+        width: 20px;
+        height: 20px;
+        font-size: 0.78rem;
+    }
+
+    .player-name {
+        font-size: 0.76rem;
+    }
+
+    .captured-pieces {
+        min-height: 18px;
+        max-width: 180px;
+        gap: 2px;
+    }
+
+    .captured-item {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Side Panel Mobile HUD */
+    .side-panel {
+        width: 100%;
+        max-width: calc(var(--square-size) * 8 + var(--board-padding) * 2 + 8px);
+        margin: 0 auto;
+        gap: 4px;
+    }
+
+    /* Turn Status: Slim horizontal bar */
+    .panel-card.turn-hero {
+        padding: 4px 10px;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .turn-hero .panel-title {
+        display: none;
+    }
+
+    .turn-badge {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+        margin-bottom: 0;
+        flex: 1;
+        text-align: center;
+        border-radius: 6px;
+    }
+
+    .moves-pill-container {
+        margin-top: 0;
+        margin-left: 8px;
+    }
+
+    .moves-pill {
+        padding: 3px 8px;
+        font-size: 0.75rem;
+        border-radius: 12px;
+    }
+
+    /* UNO Deck Panel: Compact HUD directly below */
+    .panel-card.deck-panel {
+        padding: 6px 10px;
+    }
+
+    .deck-panel .panel-title {
+        font-size: 0.78rem;
+        margin-bottom: 4px;
+    }
+
+    .uno-zone {
+        min-height: 0 !important;
+        height: 76px;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .deck-container {
+        width: auto;
+        gap: 3px;
+    }
+
+    .deck-pile {
+        width: 50px;
+        height: 70px;
+    }
+
+    .deck-stack-card {
+        border-radius: 6px;
+    }
+
+    .uno-card {
+        width: 50px;
+        height: 70px;
+        border-radius: 6px;
+        border-width: 2px;
+    }
+
+    .uno-back-oval {
+        width: 38px;
+        height: 50px;
+    }
+
+    .uno-back-text {
+        font-size: 0.72rem;
+    }
+
+    .btn-draw-card {
+        padding: 2px 6px;
+        font-size: 0.68rem;
+        min-height: 20px;
+        border-radius: 5px;
+    }
+
+    .active-card-container {
+        width: auto;
+    }
+
+    .active-card-slot {
+        width: 50px;
+        height: 70px;
+        min-width: 50px;
+        border-radius: 6px;
+    }
+
+    .empty-slot-text {
+        font-size: 0.55rem;
+        padding: 2px;
+    }
+
+    /* UNO Card Inner Graphic Scaling on Mobile */
+    .card-corner {
+        font-size: 0.62rem;
+        padding: 1px 2px;
+    }
+
+    .card-oval {
+        width: 34px;
+        height: 48px;
+    }
+
+    .card-inner-symbol {
+        font-size: 1.1rem;
+    }
+
+    .wild-wheel {
+        width: 22px;
+        height: 22px;
+    }
+
+    .w4-text {
+        font-size: 0.75rem;
+    }
+
+    .effect-description-box {
+        min-height: 0 !important;
+        margin-top: 4px;
+        padding: 4px 8px;
+        gap: 6px;
+    }
+
+    .effect-badge {
+        font-size: 0.72rem;
+        padding: 2px 6px;
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+
+    #cardDesc {
+        font-size: 0.7rem;
+        line-height: 1.2;
+    }
+
+    /* Collapsible History on Mobile */
+    .panel-card.history-panel {
+        padding: 6px 10px;
+    }
+
+    .history-toggle {
+        cursor: pointer;
+        user-select: none;
+        margin-bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .hist-toggle-icon {
+        display: inline-block;
+        font-size: 0.82rem;
+        margin-left: 4px;
+        color: #38bdf8;
+    }
+
+    .history-body.collapsed {
+        display: none;
+    }
+
+    .history-container {
+        height: 120px;
     }
 }
 
@@ -1147,6 +1406,20 @@ main {
     border-left-color: #38bdf8 !important;
     border-left-width: 4px !important;
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+/* Move History Container */
+.history-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.hist-toggle-icon {
+    display: none;
+}
+
+.history-body {
+    display: block;
 }
 
 /* History Controls Bar */

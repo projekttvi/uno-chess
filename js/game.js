@@ -161,6 +161,18 @@ class UnoChessGame {
         if (this.dom.btnReturnToLive) {
             this.dom.btnReturnToLive.addEventListener('click', () => this.returnToLive());
         }
+                const histToggle = document.getElementById('historyHeaderToggle');
+        const histBody = document.getElementById('historyBody');
+        const histIcon = document.getElementById('histToggleIcon');
+        if (histToggle && histBody) {
+            histToggle.addEventListener('click', () => {
+                histBody.classList.toggle('collapsed');
+                if (histIcon) {
+                    histIcon.textContent = histBody.classList.contains('collapsed') ? '▾' : '▴';
+                }
+            });
+        }
+
         if (this.dom.btnBannerReturn) {
             this.dom.btnBannerReturn.addEventListener('click', () => this.returnToLive());
         }
