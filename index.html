@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>UNO Chess — Шахматы с картами УНО</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="assets/favicon.png">
+    <link rel="stylesheet" href="css/style.css?v=14">
+</head>
+<body>
+    <!-- Top Header -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-badge">UNO</div>
+            <div class="logo-title">CHESS</div>
+        </div>
+
+        <div class="header-controls">
+            <!-- Game Mode & AI Controls -->
+            <div class="mode-selector-container">
+                <select id="gameModeSelect" class="styled-select" title="Режим игры">
+                    <option value="pve" selected>🤖 Против ИИ</option>
+                    <option value="eve">⚔️ Бот vs Бот</option>
+                    <option value="pvp">👥 2 Игрока</option>
+                </select>
+                <div id="aiOptionsGroup" class="ai-options-group">
+                    <select id="aiDifficultySelect" class="styled-select" title="Сложность бота">
+                        <option value="easy">🟢 Лёгкий</option>
+                        <option value="medium" selected>🟡 Средний</option>
+                        <option value="hard">🔴 Сложный</option>
+                    </select>
+                    <select id="playerSideSelect" class="styled-select" title="Играть за сторону">
+                        <option value="w" selected>⚪ Белые</option>
+                        <option value="b">⚫ Чёрные</option>
+                        <option value="random">🎲 Случайно</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="btnPauseBot" class="btn hidden">⏸ Пауза</button>
+            <button id="btnDeckConfig" class="btn" title="Просмотр и настройка колоды карт">🃏 Колода</button>
+            <button id="btnRules" class="btn">📖 Правила</button>
+            <button id="btnSound" class="btn">🔊 Звук</button>
+            <button id="btnRestart" class="btn btn-primary">🔄 Новая игра</button>
+        </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <main>
+        <!-- Chessboard Column -->
+        <div class="board-container">
+            <!-- Opponent Bar (Top) -->
+            <div class="player-bar">
+                <div class="player-info">
+                    <div id="opponentAvatar" class="player-avatar avatar-black">🤖</div>
+                    <span id="opponentName" class="player-name">Бот (Черные)</span>
+                </div>
+                <div id="capturedBlack" class="captured-pieces" title="Срубленные фигуры черных"></div>
+            </div>
+
+            <!-- Board with Coordinates and Replay Banner -->
+            <div id="boardWrapper" class="board-wrapper">
+                <!-- History Review Floating Banner -->
+                <div id="replayBanner" class="replay-banner hidden">
+                    <span>🔍 Просмотр истории партии</span>
+                    <button id="btnBannerReturn" class="btn-sm">⚡ Вернуться к игре</button>
+                </div>
+
+                <div id="coordRanks" class="coordinates-ranks">
+                    <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                </div>
+                <div id="chessboard" class="chessboard"></div>
+                <div id="coordFiles" class="coordinates-files">
+                    <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
+                </div>
+            </div>
+
+            <!-- Friendly Bar (Bottom) -->
+            <div class="player-bar">
+                <div class="player-info">
+                    <div id="friendlyAvatar" class="player-avatar avatar-white">♔</div>
+                    <span id="friendlyName" class="player-name">Игрок (Белые)</span>
+                </div>
+                <div id="capturedWhite" class="captured-pieces" title="Срубленные фигуры белых"></div>
+            </div>
+        </div>
+
+        <!-- UNO Control Side Panel -->
+        <div class="side-panel">
+            <!-- Turn Status Card -->
+            <div class="panel-card turn-hero">
+                <div class="panel-title">Текущий раунд</div>
+                <div id="turnBadge" class="turn-badge white-turn">
+                    <span id="turnPlayerName">Ход Белых</span>
+                </div>
+                <div class="moves-pill-container">
+                    <div id="movesPill" class="moves-pill" style="display: none;">
+                        Осталось ходов: <span id="movesCount" class="num">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UNO Card Deck & Active Card Zone -->
+            <div class="panel-card deck-panel">
+                <div class="panel-title">
+                    <span>Колода карт UNO</span>
+                    <span id="deckCounterPill" class="deck-counter-pill" title="Посмотреть состав и настроить колоду">🃏 53 карты</span>
+                </div>
+                <div class="uno-zone">
+                    <!-- Deck Pile -->
+                    <div class="deck-container">
+                        <div id="deckPile" class="deck-pile" title="Тянуть карту UNO">
+                            <div class="deck-stack-card"></div>
+                            <div class="deck-stack-card"></div>
+                            <div class="deck-stack-card uno-card uno-card-back">
+                                <div class="uno-back-oval">
+                                    <span class="uno-back-text">UNO</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btnDrawCard" class="btn-draw-card">Тянуть карту</button>
+                    </div>
+
+                    <!-- Active Drawn Card Slot -->
+                    <div class="active-card-container">
+                        <div id="activeCardSlot" class="active-card-slot">
+                            <div class="empty-slot-text">Нажмите "Тянуть карту", чтобы начать ход</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Effect Description Box -->
+                <div class="effect-description-box">
+                    <div id="cardTitle" class="effect-badge">Ожидание карты</div>
+                    <div id="cardDesc" style="color: #cbd5e1;">Перед каждым ходом вытяните карту UNO, чтобы узнать эффект и число ходов!</div>
+                </div>
+            </div>
+
+            <!-- Move History with Scrubber -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <span>История ходов & эффектов</span>
+                    <span id="histStepIndicator" class="hist-indicator"></span>
+                </div>
+                <div id="historyList" class="history-container"></div>
+                <div class="history-controls">
+                    <button id="btnHistStart" class="btn-hist" title="В начало партии (Home)">⏮</button>
+                    <button id="btnHistPrev" class="btn-hist" title="Шаг назад (←)">◀</button>
+                    <button id="btnHistNext" class="btn-hist" title="Шаг вперед (→)">▶</button>
+                    <button id="btnHistEnd" class="btn-hist" title="В конец партии (End)">⏭</button>
+                    <button id="btnReturnToLive" class="btn-hist btn-hist-live hidden" title="Вернуться к актуальной позиции">⚡ К игре</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Deck Configuration & Viewer Modal -->
+    <div id="deckModal" class="modal-overlay">
+        <div class="modal-content modal-deck-content">
+            <button id="deckModalCloseX" class="modal-close-x" title="Закрыть">✕</button>
+            <div class="deck-modal-header">
+                <h2 class="modal-title" style="margin-bottom: 4px;">🃏 Состав и настройка колоды</h2>
+                <div class="deck-modal-stats">
+                    <span>Всего карт: <b id="deckModalTotal" class="deck-stat-val">53</b></span>
+                    <span class="deck-stat-sep">•</span>
+                    <span>В текущей партии: <b id="deckModalRemaining" class="deck-stat-val">53</b></span>
+                </div>
+            </div>
+
+            <!-- Presets Bar -->
+            <div class="deck-presets-bar">
+                <span class="preset-label">Готовые пресеты:</span>
+                <button type="button" class="btn-preset" data-preset="standard">⚖️ Стандарт</button>
+                <button type="button" class="btn-preset" data-preset="fast">⚡ Быстрый бой</button>
+                <button type="button" class="btn-preset" data-preset="chaos">🌀 Хаос</button>
+            </div>
+
+            <!-- Cards List Container with Scroll -->
+            <div id="deckCardsContainer" class="deck-cards-container">
+                <!-- Dynamically populated from CARD_CONFIG_SCHEMA -->
+            </div>
+
+            <div class="deck-modal-footer">
+                <button id="deckResetBtn" class="btn">По умолчанию</button>
+                <div style="display: flex; gap: 10px;">
+                    <button id="deckCancelBtn" class="btn">Отмена</button>
+                    <button id="deckApplyBtn" class="btn btn-primary">Применить и начать заново</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resurrect Modal (+1 / +2 / -1 / -2 / +4 Cards) -->
+    <div id="resurrectModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">✨ Возврат фигур</h2>
+            <p class="modal-desc">Выберите срубленную фигуру, которую хотите вернуть на поле:</p>
+            <div id="resurrectList" class="resurrect-grid"></div>
+            <button id="resurrectSkipBtn" class="btn">Пропустить возврат</button>
+        </div>
+    </div>
+
+    <!-- Pawn Promotion Modal -->
+    <div id="promotionModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">👑 Превращение пешки</h2>
+            <p class="modal-desc">Выберите фигуру для превращения вашей пешки:</p>
+            <div id="promotionList" class="promotion-grid"></div>
+            <button id="promotionCancelBtn" class="btn">Отмена хода</button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal with Review Option -->
+    <div id="gameOverModal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="gameOverCloseX" class="modal-close-x" title="Закрыть и посмотреть позицию">✕</button>
+            <h2 id="gameOverTitle" class="modal-title">Победа! 👑</h2>
+            <p id="gameOverDesc" class="modal-desc">Мат королю противника!</p>
+            <div style="display: flex; justify-content: center; gap: 12px; margin-top: 20px;">
+                <button id="gameOverBtn" class="btn btn-primary" style="padding: 12px 28px; font-size: 1.05rem;">Сыграть снова</button>
+                <button id="gameOverReviewBtn" class="btn" style="padding: 12px 24px; font-size: 1.05rem;">Просмотр партии</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rules Modal -->
+    <div id="rulesModal" class="modal-overlay">
+        <div class="modal-content" style="text-align: left; max-width: 600px;">
+            <h2 class="modal-title" style="text-align: center; color: #f1c40f;">Правила UNO Chess</h2>
+            <div style="font-size: 0.95rem; line-height: 1.6; color: #e2e8f0; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+                <p><strong>🃏 Тянуть карту:</strong> Перед каждым своим ходом игрок берет карту из колоды UNO.</p>
+                <p><strong>🔢 Числа (1, 2, 3):</strong> Количество ходов в раунде. <em>Важное правило:</em> одну и ту же фигуру за один раунд можно сдвинуть только <strong>1 раз</strong>! Например, если выпало 2, вы делаете ход пешкой и затем конем (или двумя разными пешками).</p>
+                <p><strong>⚖️ Марсельское правило шаха:</strong> Если игрок объявляет <strong>ШАХ</strong> во время мульти-хода, все оставшиеся ходы в этом раунде немедленно сгорают, и ход сразу передаётся сопернику для защиты короля. Короля нельзя срубить напрямую фигурой.</p>
+                <p><strong>⛔ Число 0 и Пропуск (Skip ⊘):</strong> Игрок пропускает свой ход, право хода переходит сопернику. В стандартной колоде нули отключены (0 ходов убраны), чтобы не затягивать партию.</p>
+                <p><strong>🔄 Реверс (Смена сторон ⇄):</strong> Игроки меняются местами и армиями! Вы забираете армию соперника ровно в том положении, в котором она стоит, и делаете 1 ход! В колоде ровно 4 карты Реверса.</p>
+                <p><strong>✨ Карты +1 (Возврат 1 фигуры):</strong> Вы можете вернуть 1 свою срубленную фигуру на свободную клетку своей половины поля, затем делаете 1 ход ДРУГОЙ фигурой!</p>
+                <p><strong>🎁 Карты -1 (Подарок сопернику):</strong> Соперник возвращает 1 свою срубленную фигуру на свою половину поля, а вы делаете 1 ход!</p>
+                <p><strong>🌟 Редкие супер-карты +2 и -2:</strong> Позволяют вернуть до двух фигур на свою половину.</p>
+                <p><strong>🛡️ Правила призыва фигур:</strong> 1) Запрещён шах с десанта (нельзя ставить фигуру так, чтобы она сразу объявляла шах королю). 2) Усталость призыва (воскрешённая фигура не может ходить в этот же ход — ход делается другой фигурой).</p>
+                <p><strong>★ Дикая карта (Wild):</strong> Супер-ход: дает 2 хода ЛЮБОЙ фигурой (разрешено ходить одной и той же фигурой дважды подряд!).</p>
+                <p><strong>💥 +4 Джокер:</strong> Верните 1 фигуру на поле И сделайте 2 хода разными фигурами!</p>
+            </div>
+            <div style="text-align: center;">
+                <button id="closeRulesBtn" class="btn btn-primary">Понятно, в бой!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts (with cache-busting query strings) -->
+    <script src="js/chess.min.js"></script>
+    <script src="js/pieces.js?v=14"></script>
+    <script src="js/audio.js?v=14"></script>
+    <script src="js/uno.js?v=14"></script>
+    <script src="js/ai.js?v=14"></script>
+    <script src="js/game.js?v=14"></script>
+</body>
+</html>
