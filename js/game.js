@@ -165,10 +165,17 @@ class UnoChessGame {
         const histBody = document.getElementById('historyBody');
         const histIcon = document.getElementById('histToggleIcon');
         if (histToggle && histBody) {
-            histToggle.addEventListener('click', () => {
+            histToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const willExpand = histBody.classList.contains('collapsed');
                 histBody.classList.toggle('collapsed');
                 if (histIcon) {
-                    histIcon.textContent = histBody.classList.contains('collapsed') ? '▾' : '▴';
+                    histIcon.textContent = willExpand ? '▴' : '▾';
+                }
+                if (willExpand) {
+                    setTimeout(() => {
+                        histBody.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 60);
                 }
             });
         }

@@ -1284,7 +1284,10 @@ main {
 
     /* Collapsible History on Mobile */
     .panel-card.history-panel {
-        padding: 6px 10px;
+        padding: 4px;
+        background: #0f1623;
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        border-radius: 10px;
     }
 
     .history-toggle {
@@ -1294,21 +1297,35 @@ main {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 7px 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 7px;
+        -webkit-tap-highlight-color: transparent;
+        transition: background 0.15s ease;
+    }
+
+    .history-toggle:active {
+        background: rgba(56, 189, 248, 0.2);
     }
 
     .hist-toggle-icon {
-        display: inline-block;
-        font-size: 0.82rem;
-        margin-left: 4px;
+        display: inline-block !important;
+        font-size: 0.95rem;
+        margin-left: 6px;
         color: #38bdf8;
+        font-weight: 900;
+    }
+
+    .history-body {
+        padding: 6px 4px 4px 4px;
     }
 
     .history-body.collapsed {
-        display: none;
+        display: none !important;
     }
 
     .history-container {
-        height: 120px;
+        height: 130px;
     }
 }
 
@@ -1408,18 +1425,19 @@ main {
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
 }
 
-/* Move History Container */
+/* Move History Container (Desktop) */
 .history-panel {
     display: flex;
     flex-direction: column;
 }
 
-.hist-toggle-icon {
-    display: none;
-}
-
-.history-body {
-    display: block;
+@media (min-width: 641px) {
+    .hist-toggle-icon {
+        display: none !important;
+    }
+    .history-body {
+        display: block !important;
+    }
 }
 
 /* History Controls Bar */
