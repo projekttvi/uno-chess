@@ -474,19 +474,29 @@ class UnoChessGame {
         }
     }
 
-    showToast(message, duration = 2500) {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
+    showToast(message, duration = 2200) {
+        if (!this.dom.toastContainer) return;
+        // Clear previous toasts so they never stack into a tower
+        const existing = this.dom.toastContainer.querySelectorAll(".toast");
+        existing.forEach(t => t.remove());
+
+        const toast = document.createElement("div");
+        toast.className = "toast";
         toast.innerHTML = message;
         this.dom.toastContainer.appendChild(toast);
 
         setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateY(-10px)';
-            toast.style.transition = 'all 0.3s ease';
-            setTimeout(() => toast.remove(), 300);
+            toast.style.opacity = "0";
+            toast.style.transform = "translateY(10px)";
+            toast.style.transition = "all 0.25s ease";
+            setTimeout(() => toast.remove(), 250);
         }, duration);
     }
+
+    isAiTurn() {
+        return this.gameMode === "eve" || (this.ai && this.ai.enabled && this.currentTurn === this.ai.aiColor);
+    }
+
 
     recordSnapshot(text = '', type = '') {
         const snap = {
@@ -1276,7 +1286,9 @@ class UnoChessGame {
                 this.showToast('Нет доступных ходов оставшимися фигурами. Ход завершен.');
                 this.passTurn();
             } else {
-                this.showToast(`Осталось ходов: ${this.movesRemaining}. Выберите ДРУГУЮ фигуру.`);
+                if (!this.isAiTurn()) {
+                    this.showToast(`Осталось ходов: ${this.movesRemaining}. Выберите ДРУГУЮ фигуру.`);
+                }
                 this.updateUI();
             }
         } else {
