@@ -659,7 +659,6 @@ class UnoChessGame {
                     this.totalMovesForTurn = card.value;
                     this.movesRemaining = card.value;
                     this.state = 'MAKING_MOVES';
-                    this.showToast(`Выпало ходов: ${card.value}. Правило: 1 фигура ходит только 1 раз!`);
                     this.updateUI();
                 }
                 break;
@@ -1286,9 +1285,6 @@ class UnoChessGame {
                 this.showToast('Нет доступных ходов оставшимися фигурами. Ход завершен.');
                 this.passTurn();
             } else {
-                if (!this.isAiTurn()) {
-                    this.showToast(`Осталось ходов: ${this.movesRemaining}. Выберите ДРУГУЮ фигуру.`);
-                }
                 this.updateUI();
             }
         } else {
