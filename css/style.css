@@ -1174,42 +1174,55 @@ main {
     }
 
     .deck-panel .panel-title {
-        font-size: 0.78rem;
-        margin-bottom: 4px;
+        font-size: 0.8rem;
+        margin-bottom: 8px;
     }
 
     .uno-zone {
         min-height: 0 !important;
-        height: 76px;
-        gap: 12px;
-        align-items: center;
+        height: auto !important;
+        padding: 4px 0 !important;
+        gap: 18px;
+        align-items: flex-start;
         justify-content: center;
     }
 
     .deck-container {
         width: auto;
-        gap: 3px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
     }
 
     .deck-pile {
-        width: 50px;
-        height: 70px;
+        width: 52px;
+        height: 74px;
+        margin-top: 3px;
     }
 
     .deck-stack-card {
         border-radius: 6px;
     }
 
+    .deck-stack-card:nth-child(1) { transform: translate(0, 0); }
+    .deck-stack-card:nth-child(2) { transform: translate(-1.5px, -1.5px); }
+    .deck-stack-card:nth-child(3) { transform: translate(-3px, -3px); }
+
+    .deck-pile:hover .deck-stack-card:nth-child(3) {
+        transform: translate(-3px, -3px);
+    }
+
     .uno-card {
-        width: 50px;
-        height: 70px;
+        width: 52px;
+        height: 74px;
         border-radius: 6px;
         border-width: 2px;
     }
 
     .uno-back-oval {
         width: 38px;
-        height: 50px;
+        height: 52px;
     }
 
     .uno-back-text {
@@ -1217,21 +1230,27 @@ main {
     }
 
     .btn-draw-card {
-        padding: 2px 6px;
-        font-size: 0.68rem;
-        min-height: 20px;
-        border-radius: 5px;
+        padding: 4px 10px;
+        font-size: 0.72rem;
+        min-height: 24px;
+        border-radius: 6px;
+        width: auto;
+        white-space: nowrap;
     }
 
     .active-card-container {
         width: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .active-card-slot {
-        width: 50px;
-        height: 70px;
-        min-width: 50px;
+        width: 52px;
+        height: 74px;
+        min-width: 52px;
         border-radius: 6px;
+        margin-top: 3px;
     }
 
     .empty-slot-text {
